@@ -15,6 +15,10 @@ class Item(models.Model):
     international_delivery_available = models.CharField(choices=(("YES", "Yes"), ("NO", "No")), max_length=30)
     available_delivery = models.CharField(choices=DELIVERY_OPTIONS, max_length=30)
     description = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.IntegerField()
+    country = models.CharField(max_length=30)
+    category = models.CharField(max_length=30)
 
     @staticmethod
     def publish(name, price, international_delivery_available, available_delivery, description):
@@ -23,11 +27,3 @@ class Item(models.Model):
                             international_delivery_available=international_delivery_available,
                             available_delivery=available_delivery,
                             description=description)
-
-
-class Country(models.Model):
-    name = models.CharField(max_length=30)
-
-
-class Category(models.Model):
-    name = models.CharField(max_length=30)
