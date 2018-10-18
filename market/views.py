@@ -12,7 +12,7 @@ def publish_item(request):
     if request.method == 'GET':
         # create form to render and return it
         form = PublishItemForm()
-        return render(request, 'publish_item_post.html', {'form': form})
+        return render(request, 'publish_item_html_validation.html', {'form': form})
 
     elif request.method == 'POST':
         # check if the form is valid
@@ -27,7 +27,7 @@ def publish_item(request):
                            'message': 'Great! Your account was created, now please check your email to '
                                       'activate your account.'}
             except Exception as e:
-                template = 'publish_item_post.html'
+                template = 'publish_item_html_validation.html'
                 context = {'title': 'Error',
                            'message': 'Error %s.' % (e)}
 
@@ -36,5 +36,5 @@ def publish_item(request):
         else:
             # show errors and redirect to form
             messages.error(request, 'Invalid form data')
-            return render(request, 'publish_item_post.html', {'form': form})
+            return render(request, 'publish_item_html_validation.html', {'form': form})
     # return response

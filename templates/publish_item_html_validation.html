@@ -145,48 +145,17 @@
         var price = $("#price")[0];
         var email = $("#email")[0];
 
-        {#var error = document.querySelector('.error');#}
-
         $("#email").change(function () {
             if (!emailRegExp.test(email.value)) {
                 // If the field is not valid, we display a custom
                 // error message.
                 email.setCustomValidity("Please after the @ the domain is expected, \".com\"." + email.value + "is " +
                     "incomplete");
-                // And we prevent the form from being sent by canceling the event
-                {#event.preventDefault();#}
             }
             else{
                 email.setCustomValidity("")
             }
         })
-
-        email.addEventListener("input", function (event) {
-            // Each time the user types something, we check if the
-            // email field is valid.
-            if (email.validity.valid) {
-                // In case there is an error message visible, if the field
-                // is valid, we remove the error message.
-                {#error.innerHTML = ""; // Reset the content of the message#}
-                {#error.className = "error"; // Reset the visual state of the message#}
-            }
-        }, false);
-        form.addEventListener("submit", function (event) {
-            // Each time the user tries to send the data, we check
-            // if the email field is valid.
-
-
-            {#if (!emailRegExp.test(email.value)) {#}
-            {##}
-            {#    // If the field is not valid, we display a custom#}
-            {#    // error message.#}
-            {#    email.setCustomValidity("Please after the @ the domain is expected, \".com\"." + email.value + "is " +#}
-            {#        "incomplete");#}
-            {#    // And we prevent the form from being sent by canceling the event#}
-            {#    event.preventDefault();#}
-            {#    // As the message must be added before the submission of the form it is submitted again#}
-            {#    form.submit();}#}
-        }, false);
 
 
     </script>
