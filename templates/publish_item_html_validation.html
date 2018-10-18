@@ -23,9 +23,14 @@
                 <div class="row">
                     <div class="col mb-3">
                         <label for="name">Name</label>
-                        <input id="name" type="text" class="form-control" name="name" placeholder="Name"
-                               :placeholder-shown maxlength="30"
-                               pattern="[a-zA-Z0-9]+" title="Only alphanumeric characters" required autofocus>
+                        <div class="input-group-prepend">
+                            <div id="name_div">
+                                {#                                <div class="input-group-text">@</div>#}
+                            </div>
+                            <input id="name" type="text" class="form-control" name="name" placeholder="Name"
+                                   :placeholder-shown maxlength="30"
+                                   pattern="[a-zA-Z0-9]+" title="Only alphanumeric characters" required autofocus>
+                        </div>
                     </div>
                     <div class="col mb-3">
                         <label for="price">Price</label>
@@ -38,16 +43,20 @@
                         <label for="email">Email</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <div class="input-group-text">@</div>
+                                <div class="input-group-text">
+                                        <img type="text/javascript" src="/static/icons/mail.png"
+                                             class="rounded mx-auto d-block" style="width: 20px">
+                                </div>
                             </div>
                             <input id="email" type="email" class="form-control" name="email" maxlength="30" required>
-                            <span class="error" aria-live="polite"></span>
+{#                            <span class="error" aria-live="polite"></span>#}
                         </div>
                     </div>
 
                     <div class="col mb-3">
                         <label for="phone">Phone</label>
-                        <input id="phone" type="tel" class="form-control" name="phone" minlength="4" maxlength="20" required >
+                        <input id="phone" type="tel" class="form-control" name="phone" minlength="4" maxlength="20"
+                               required>
                     </div>
                 </div>
 
@@ -56,14 +65,14 @@
                         <legend class="col-form-label ">Available international delivery</legend>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="international_delivery_available"
-                                   id="international_delivery_available1" value="YES" required >
+                                   id="international_delivery_available1" value="YES" required>
                             <label class="form-check-label" for="international_delivery_available1">
                                 Yes
                             </label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="international_delivery_available"
-                                   id="international_delivery_available2" value="NO" required >
+                                   id="international_delivery_available2" value="NO" required>
                             <label class="form-check-label" for="international_delivery_available2">
                                 No
                             </label>
@@ -72,7 +81,7 @@
 
                     <div class="col-md-6 mb-3">
                         <label for="id_available_delivery">Preferred delivery company</label>
-                        <select class="form-control" name="available_delivery" id="id_available_delivery" required >
+                        <select class="form-control" name="available_delivery" id="id_available_delivery" required>
                             <option value="" selected>Choose...</option>
                             <option value="UPS">UPS</option>
                             <option value="FEDEX">Fedex</option>
@@ -83,7 +92,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="id_category">Category</label>
-                        <select class="form-control" name="category" id="id_category" required >
+                        <select class="form-control" name="category" id="id_category" required>
                             <option value="" selected>Choose...</option>
                             <option value="Arts">Arts</option>
                             <option value="Automotive">Automotive</option>
@@ -97,7 +106,7 @@
 
                     <div class="col-md-6 mb-3">
                         <label for="id_country">Country</label>
-                        <select class="form-control" name="country"  id="id_country" required >
+                        <select class="form-control" name="country" id="id_country" required>
                             <option value="" selected>Choose...</option>
                             <option value="UY">Uruguay</option>
                             <option value="US">US</option>
@@ -113,7 +122,7 @@
 
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea class="form-control" name="description" id="description" rows="3" required ></textarea>
+                    <textarea class="form-control" name="description" id="description" rows="3" required></textarea>
                 </div>
 
                 <input type="submit" class="btn btn-primary" value="Submit"/>
@@ -152,9 +161,40 @@
                 email.setCustomValidity("Please after the @ the domain is expected, \".com\"." + email.value + "is " +
                     "incomplete");
             }
-            else{
+            else {
                 email.setCustomValidity("")
             }
+        })
+        $("#name").change(function () {
+            $("#name_div").html('<div class="input-group-text">' +
+                            '<img type="text/javascript" src="/static/icons/loading.gif" ' +
+                            'class="rounded mx-auto d-block" style="width: 20px"></div>')
+            name_url = 'http://127.0.0.1:8000/api/verify_name/' + $("#name")[0].value + '/'
+
+
+            jQuery.ajax({
+                {#async: false,       //excecutes asycronicaly, waits until the end to continue#}
+                url: name_url,
+                data: {format: 'json'},
+                success: function (data) {
+                    console.log(data);
+
+                    if (data.performance_report_charts === "Name is already taken") {
+                        $("#name_div").html('<div class="input-group-text">' +
+                            '<img type="text/javascript" src="/static/icons/error.png" ' +
+                            'class="rounded mx-auto d-block" style="width: 20px">' +
+                            '</div>')
+                        email.setCustomValidity("Please change the name as " + $("#name")[0].value +
+                            " is already taken.");
+                    }
+                    else {
+                        $("#name_div").html('<div class="input-group-text">' +
+                            '<img type="text/javascript" src="/static/icons/OK.png" ' +
+                            'class="rounded mx-auto d-block" style="width: 20px">' +
+                            '</div>')
+                    }
+                }
+            });
         })
 
 

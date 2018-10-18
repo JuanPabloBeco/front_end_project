@@ -1,7 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-
 DELIVERY_OPTIONS = (
     ("UPS", "UPS"),
     ("FEDEX", "Fedex"),
@@ -16,14 +15,10 @@ class Item(models.Model):
     available_delivery = models.CharField(choices=DELIVERY_OPTIONS, max_length=30)
     description = models.CharField(max_length=100)
     email = models.EmailField()
-    phone = models.IntegerField()
+    phone = models.IntegerField(max_length=15)
     country = models.CharField(max_length=30)
     category = models.CharField(max_length=30)
 
     @staticmethod
-    def publish(name, price, international_delivery_available, available_delivery, description):
-        Item.objects.create(name=name,
-                            price=price,
-                            international_delivery_available=international_delivery_available,
-                            available_delivery=available_delivery,
-                            description=description)
+    def publish(**item_data):
+        Item.objects.create(**item_data)
