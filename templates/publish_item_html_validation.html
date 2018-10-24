@@ -25,10 +25,13 @@
                         <label for="name">Name</label>
                         <div class="input-group-prepend">
                             <div id="name_div">
-                                {#                                <div class="input-group-text">@</div>#}
+                                <div class="input-group-text">
+                                    <img type="text/javascript" src="/static/icons/name.png"
+                                         class="rounded mx-auto d-block" style="width: 20px">
+                                </div>
                             </div>
                             <input id="name" type="text" class="form-control" name="name" placeholder="Name"
-                                   :placeholder-shown maxlength="30"
+                                   :placeholder-shown maxlength="30" autocomplete='name'
                                    pattern="[a-zA-Z0-9]+" title="Only alphanumeric characters" required autofocus>
                         </div>
                     </div>
@@ -44,12 +47,12 @@
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">
-                                        <img type="text/javascript" src="/static/icons/mail.png"
-                                             class="rounded mx-auto d-block" style="width: 20px">
+                                    <img type="text/javascript" src="/static/icons/mail.png"
+                                         class="rounded mx-auto d-block" style="width: 20px">
                                 </div>
                             </div>
                             <input id="email" type="email" class="form-control" name="email" maxlength="30" required>
-{#                            <span class="error" aria-live="polite"></span>#}
+                            {#                            <span class="error" aria-live="polite"></span>#}
                         </div>
                     </div>
 
@@ -150,7 +153,6 @@
         //------------------------------------------------------------------//
 
         var form = $("#add-form")[0];
-        var name = $("#name")[0];
         var price = $("#price")[0];
         var email = $("#email")[0];
 
@@ -166,35 +168,46 @@
             }
         })
         $("#name").change(function () {
-            $("#name_div").html('<div class="input-group-text">' +
-                            '<img type="text/javascript" src="/static/icons/loading.gif" ' +
-                            'class="rounded mx-auto d-block" style="width: 20px"></div>')
-            name_url = 'http://127.0.0.1:8000/api/verify_name/' + $("#name")[0].value + '/'
+            if($("#name")[0].value==""){
+                $("#name_div").html('<div class="input-group-text">' +
+                                        '<img type="text/javascript" src="/static/icons/name.png" ' +
+                                        'class="rounded mx-auto d-block" style="width: 20px"></div>')
+            }
+            else{
+                $("#name_div").html('<div class="input-group-text">' +
+                    '<img type="text/javascript" src="/static/icons/loading.gif" ' +
+                    'class="rounded mx-auto d-block" style="width: 20px"></div>')
+
+                name_url = 'http://127.0.0.1:8000/api/verify_name/' + $("#name")[0].value + '/'
 
 
-            jQuery.ajax({
-                {#async: false,       //excecutes asycronicaly, waits until the end to continue#}
-                url: name_url,
-                data: {format: 'json'},
-                success: function (data) {
-                    console.log(data);
+                jQuery.ajax({
+                    {#async: false,       //executes asychronicaly, waits until the end to continue#}
+                    url: name_url,
+                    data: {format: 'json'},
+                    success: function (data) {
+                        console.log(data);
 
-                    if (data.performance_report_charts === "Name is already taken") {
-                        $("#name_div").html('<div class="input-group-text">' +
-                            '<img type="text/javascript" src="/static/icons/error.png" ' +
-                            'class="rounded mx-auto d-block" style="width: 20px">' +
-                            '</div>')
-                        email.setCustomValidity("Please change the name as " + $("#name")[0].value +
-                            " is already taken.");
+                        var name = $("#name")[0];
+                        if (data.is_name_available === "Name is already taken") {
+                            $("#name_div").html('<div class="input-group-text">' +
+                                '<img type="text/javascript" src="/static/icons/error.png" ' +
+                                'class="rounded mx-auto d-block" style="width: 20px">' +
+                                '</div>')
+                            email.set
+                            name.setCustomValidity("Please change the name as " + $("#name")[0].value +
+                                " is already taken.");
+                        }
+                        else {
+                            $("#name_div").html('<div class="input-group-text">' +
+                                '<img type="text/javascript" src="/static/icons/OK.png" ' +
+                                'class="rounded mx-auto d-block" style="width: 20px">' +
+                                '</div>')
+                            name.setCustomValidity("");
+                        }
                     }
-                    else {
-                        $("#name_div").html('<div class="input-group-text">' +
-                            '<img type="text/javascript" src="/static/icons/OK.png" ' +
-                            'class="rounded mx-auto d-block" style="width: 20px">' +
-                            '</div>')
-                    }
-                }
-            });
+                });
+            }
         })
 
 

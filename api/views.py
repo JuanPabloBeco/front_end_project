@@ -6,5 +6,5 @@ from market.serializers import is_name_available
 
 
 def verify_name(request, name):
-    context = {'performance_report_charts': is_name_available(name)}
+    context = {'is_name_available': is_name_available(name)}
     return JsonResponse(context, status=200)

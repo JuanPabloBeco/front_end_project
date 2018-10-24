@@ -9,13 +9,13 @@ DELIVERY_OPTIONS = (
 
 
 class Item(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, unique=True)
     price = models.IntegerField()
     international_delivery_available = models.CharField(choices=(("YES", "Yes"), ("NO", "No")), max_length=30)
     available_delivery = models.CharField(choices=DELIVERY_OPTIONS, max_length=30)
     description = models.CharField(max_length=100)
     email = models.EmailField()
-    phone = models.IntegerField(max_length=15)
+    phone = models.IntegerField()
     country = models.CharField(max_length=30)
     category = models.CharField(max_length=30)
 
